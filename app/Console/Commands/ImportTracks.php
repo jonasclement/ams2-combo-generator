@@ -9,7 +9,6 @@ use App\Models\Track;
 use App\Models\TrackTag;
 use Illuminate\Console\Command;
 use JsonException;
-use Storage;
 
 class ImportTracks extends Command
 {
@@ -71,27 +70,8 @@ class ImportTracks extends Command
         return Command::SUCCESS;
     }
 
-    /** @param array<string, mixed> $trackData */
-    private function hashTrackData(array $trackData): string
+    private function getCacheFile(): string
     {
-        return md5(serialize($trackData));
-    }
-
-    /** @param array<string, mixed> $tracks */
-    private function hasDataChanged(array $tracks): bool
-    {
-        if (!Storage::exists(self::CACHE_FILE)) {
-            return true;
-        }
-
-        $cachedHash = Storage::get(self::CACHE_FILE);
-        $currentHash = $this->hashTrackData($tracks);
-        return $cachedHash !== $currentHash;
-    }
-
-    /** @param array<string, mixed> $tracks */
-    private function cacheDataHash(array $tracks): void
-    {
-        Storage::put(self::CACHE_FILE, $this->hashTrackData($tracks));
+        return self::CACHE_FILE;
     }
 }
