@@ -16,7 +16,7 @@ trait GameDataTrait
      * @throws MissingDataFileException
      * @throws JsonException
      */
-    private function getTrackData(string $file): array
+    private function getGameData(string $file): array
     {
         if (!Storage::disk(self::DISK)->exists($file)) {
             $path = Storage::disk(self::DISK)->path($file);

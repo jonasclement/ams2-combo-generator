@@ -41,7 +41,7 @@ class ImportTracks extends Command
     public function handle(): int
     {
         try {
-            $trackData = $this->getTrackData('ams2-data-tracks.json');
+            $trackData = $this->getGameData('ams2-data-tracks.json');
         } catch (MissingDataFileException | JsonException $e) {
             $this->error(get_class($e) . ': ' . $e->getMessage());
             return Command::FAILURE;
