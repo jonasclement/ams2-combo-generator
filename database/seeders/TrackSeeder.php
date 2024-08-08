@@ -11,6 +11,8 @@ class TrackSeeder extends Seeder
 {
     use GameDataTrait;
 
+    public function __construct(private TrackTagger $trackTagger) {}
+
     /**
      * Run the database seeds.
      */
@@ -28,7 +30,7 @@ class TrackSeeder extends Seeder
             $model->country = $data['extra_data']['country'];
             $model->save();
 
-            TrackTagger::tag($model, $data);
+            $this->trackTagger->tag($model, $data);
         }
     }
 }
