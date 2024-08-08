@@ -14,7 +14,7 @@ class ImportTracks extends Command
 {
     use GameDataTrait;
 
-    private const CACHE_FILE = 'track-data-hash.md5';
+    private const OPTION_FORCE = 'force';
 
     /**
      * The name and signature of the console command.
@@ -30,6 +30,11 @@ class ImportTracks extends Command
      */
     protected $description = 'Import track data to database';
 
+    protected function configure()
+    {
+        $this->addOption(self::OPTION_FORCE, 'f', null, 'Force import even if data has not changed');
+    }
+
     /**
      * Execute the console command.
      */
@@ -43,7 +48,7 @@ class ImportTracks extends Command
         }
 
         // Check if contents have changed - if not, no reason to import
-        if (!$this->hasDataChanged($trackData)) {
+        if (!$this->hasDataChanged($trackData, $this->option(self::OPTION_FORCE))) {
             $this->info('No changes detected, skipping import');
             return Command::SUCCESS;
         }
@@ -68,10 +73,5 @@ class ImportTracks extends Command
         $this->cacheDataHash($trackData);
 
         return Command::SUCCESS;
-    }
-
-    private function getCacheFile(): string
-    {
-        return self::CACHE_FILE;
     }
 }

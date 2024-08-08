@@ -10,8 +10,6 @@ trait GameDataTrait
 {
     private const DISK = 'ams2-data';
 
-    abstract private function getCacheFile(): string;
-
     /**
      * @return array<string, mixed>[]
      *
@@ -39,8 +37,12 @@ trait GameDataTrait
     }
 
     /** @param array<string, mixed> $data */
-    private function hasDataChanged(array $data): bool
+    private function hasDataChanged(array $data, bool $force = false): bool
     {
+        if ($force) {
+            return true;
+        }
+
         if (!Storage::exists($this->getCacheFile())) {
             return true;
         }
@@ -54,5 +56,10 @@ trait GameDataTrait
     private function cacheDataHash(array $data): void
     {
         Storage::put($this->getCacheFile(), $this->hashData($data));
+    }
+
+    private function getCacheFile(): string
+    {
+        return basename(get_class($this)) . '.cache.md5';
     }
 }
