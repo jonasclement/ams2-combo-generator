@@ -1,5 +1,8 @@
 <x-layout>
-  <div class="row">
-    <div class="col-12">Hello!</div>
+  <h1 class="display-2">{{ config('app.name') }}</h1>
+
+  <p class="lead">{{ __('main.lead') }}</p>
+
+  <div class="mt-4">
   </div>
 </x-layout>
