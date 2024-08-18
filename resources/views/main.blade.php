@@ -4,5 +4,6 @@
   <p class="lead">{{ __('main.lead') }}</p>
 
   <div class="mt-4">
+    <livewire:combo-generator />
   </div>
 </x-layout>
