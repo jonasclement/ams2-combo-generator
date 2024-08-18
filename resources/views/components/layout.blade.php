@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
   <meta charset="utf-8">
@@ -7,16 +8,17 @@
 
   <!-- CSS -->
   @vite(['resources/sass/app.scss'])
-
-  <!-- Scripts -->
-  @vite(['resources/js/app.js'])
+  @livewireStyles
 </head>
 
 <body>
   <div class="container">
-    <!-- TODO navigation on all pages? -->
     {{ $slot }}
   </div>
 </body>
+
+<!-- Scripts -->
+@vite(['resources/js/app.js'])
+@livewireScripts
 
 </html>
