@@ -2,9 +2,14 @@
 
 namespace App\Livewire;
 
+use App\CarClassCombo;
 use App\Enums\TagEnum;
+use App\Models\Car;
+use App\Models\CarTag;
 use App\Models\Track;
+use App\Models\TrackTag;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Cookie;
 use Livewire\Component;
 
@@ -20,6 +25,8 @@ class ComboGenerator extends Component
     /** @var array<value-of<TagEnum>, bool> */
     public array $carFilters = [];
 
+    private ?CarClassCombo $combo = null;
+
     public function mount(): void
     {
         $this->trackFilters = $this->initializeTrackFilters();
@@ -28,7 +35,23 @@ class ComboGenerator extends Component
 
     public function render(): View
     {
-        return view('livewire.combo-generator');
+        return view('livewire.combo-generator', [
+            'combo' => $this->combo
+        ]);
+    }
+
+    public function generate(): void
+    {
+        $car = Car::all()
+            ->filter((fn(Car $c) => $this->tagFilter($c, $this->carFilters)))
+            ->random();
+
+        /** @var Track */
+        $track = Track::all()
+            ->filter((fn(Track $t) => $this->tagFilter($t, $this->trackFilters)))
+            ->random();
+
+        $this->combo = new CarClassCombo($car, $track);
     }
 
     private function initializeTrackFilters(): array
@@ -57,5 +80,20 @@ class ComboGenerator extends Component
             TagEnum::Kart->value => false,
             TagEnum::RallyCross->value => false
         ];
+    }
+
+    /**
+     * @param Builder $query
+     * @param array<value-of<TagEnum>, bool> $filters
+     */
+    private function tagFilter(Car|Track $entity, array $filters): bool
+    {
+        foreach ($filters as $tag => $value) {
+            if (!$value && $entity->tags->contains(fn(CarTag|TrackTag $tag) => $tag->tag === 'DLC')) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

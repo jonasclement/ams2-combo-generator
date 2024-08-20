@@ -16,4 +16,9 @@ return [
         'kart' => 'Karting?',
         'rallycross' => 'RallyCross?',
     ],
+    'generate' => 'Generate!',
+    'combo' => [
+        'heading' => 'You are racing...',
+        'on' => 'on'
+    ]
 ];
