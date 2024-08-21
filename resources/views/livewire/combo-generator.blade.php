@@ -1,10 +1,10 @@
 <div>
   <form wire:submit="generate">
     <fieldset class="mb-3 row">
-      <legend class="col-12 col-sm-4 col-form-legend">{{ __('generator.legend.trackFilter') }}</legend>
+      <legend class="col-12 col-sm-4 col-form-legend">{{ __('generator.legend.carFilter') }}</legend>
       <div class="col-12 col-sm-8">
         <div class="row">
-          <livewire:combo-generator.filters :filters="$trackFilters" type="track" />
+          <livewire:combo-generator.filters :filters="$carFilters" type="car" />
         </div>
       </div>
     </fieldset>
@@ -12,10 +12,10 @@
     <hr />
 
     <fieldset class="mb-3 row">
-      <legend class="col-12 col-sm-4 col-form-legend">{{ __('generator.legend.carFilter') }}</legend>
+      <legend class="col-12 col-sm-4 col-form-legend">{{ __('generator.legend.trackFilter') }}</legend>
       <div class="col-12 col-sm-8">
         <div class="row">
-          <livewire:combo-generator.filters :filters="$carFilters" type="car" />
+          <livewire:combo-generator.filters :filters="$trackFilters" type="track" />
         </div>
       </div>
     </fieldset>
