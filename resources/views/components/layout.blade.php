@@ -11,7 +11,7 @@
   @livewireStyles
 </head>
 
-<body>
+<body data-bs-theme="dark">
   <div class="container">
     {{ $slot }}
   </div>
