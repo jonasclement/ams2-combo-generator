@@ -11,6 +11,8 @@ use App\Models\TrackTag;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Cookie;
+use InvalidArgumentException;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class ComboGenerator extends Component
@@ -54,29 +56,55 @@ class ComboGenerator extends Component
         $this->combo = new CarClassCombo($car, $track);
     }
 
-    private function initializeTrackFilters(): array
+    /** @param array<value-of<TagEnum>, bool> $filters */
+    #[On('filtersUpdated')]
+    public function updatedTrackFilters(string $type, array $filters): void
     {
-        $cookie = self::COOKIE_TRACK_FILTERS . self::COOKIE_VERSION;
-        if (Cookie::has($cookie)) {
-            return unserialize(Cookie::get($cookie));
-        }
+        Cookie::queue(Cookie::forever($this->getCookieKey($type), serialize($filters)));
+    }
 
-        return [
-            TagEnum::DLC->value => true,
-            TagEnum::Kart->value => false,
-            TagEnum::RallyCross->value => false
-        ];
+    private function getCookieKey(string $type): string
+    {
+        return match ($type) {
+            'track' => $this->getTrackCookieKey(),
+            'car' => $this->getCarCookieKey(),
+            default => throw new InvalidArgumentException("Invalid type: $type")
+        };
+    }
+
+    private function getCarCookieKey(): string
+    {
+        return self::COOKIE_CAR_FILTERS . self::COOKIE_VERSION;
+    }
+
+    private function getTrackCookieKey(): string
+    {
+        return self::COOKIE_TRACK_FILTERS . self::COOKIE_VERSION;
     }
 
     private function initializeCarFilters(): array
     {
-        $cookie = self::COOKIE_CAR_FILTERS . self::COOKIE_VERSION;
+        $cookie = $this->getCarCookieKey();
         if (Cookie::has($cookie)) {
             return unserialize(Cookie::get($cookie));
         }
 
         return [
             TagEnum::DLC->value => false,
+            TagEnum::Kart->value => false,
+            TagEnum::RallyCross->value => false
+        ];
+    }
+
+    private function initializeTrackFilters(): array
+    {
+        $cookie = $this->getTrackCookieKey();
+        if (Cookie::has($cookie)) {
+            return unserialize(Cookie::get($cookie));
+        }
+
+        return [
+            TagEnum::DLC->value => true,
             TagEnum::Kart->value => false,
             TagEnum::RallyCross->value => false
         ];
