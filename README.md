@@ -1,4 +1,4 @@
-# AMS2 Combo Generator
+# AMS2 Roulette
 
 ## Requirements
 
