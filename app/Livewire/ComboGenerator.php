@@ -56,13 +56,25 @@ class ComboGenerator extends Component
         $this->combo = new CarClassCombo($car, $track);
     }
 
-    /** @param array<value-of<TagEnum>, bool> $filters */
+    /**
+     * @param "track"|"car" $type
+     * @param array<value-of<TagEnum>, bool> $filters
+     */
     #[On('filtersUpdated')]
-    public function updatedTrackFilters(string $type, array $filters): void
+    public function updatedFilters(string $type, array $filters): void
     {
         Cookie::queue(Cookie::forever($this->getCookieKey($type), serialize($filters)));
+
+        if ($type === 'car') {
+            $this->carFilters = $filters;
+        }
+
+        if ($type === 'track') {
+            $this->trackFilters = $filters;
+        }
     }
 
+    /** @param "track"|"car" $type */
     private function getCookieKey(string $type): string
     {
         return match ($type) {
@@ -117,7 +129,7 @@ class ComboGenerator extends Component
     private function tagFilter(Car|Track $entity, array $filters): bool
     {
         foreach ($filters as $tag => $value) {
-            if (!$value && $entity->tags->contains(fn(CarTag|TrackTag $tag) => $tag->tag === 'DLC')) {
+            if (!$value && $entity->tags->contains(fn(CarTag|TrackTag $entityTag) => $entityTag->tag === $tag)) {
                 return false;
             }
         }
