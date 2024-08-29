@@ -11,9 +11,14 @@
   @livewireStyles
 </head>
 
-<body data-bs-theme="dark">
-  <div class="container">
+<body>
+  <div class="container pt-3">
     {{ $slot }}
+    <div class="row mt-5">
+      <div class="col-12">
+        <p>Love AMS2? Join <a href="https://mvrc.racing/discord" target="_blank">the MVRC Discord</a> and race with us!</p>
+      </div>
+    </div>
   </div>
 </body>
 
