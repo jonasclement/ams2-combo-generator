@@ -10,7 +10,7 @@ class Car extends Model implements TaggableInterface
 {
     public $incrementing = false;
 
-    protected $primaryKey = 'name';
+    protected $primaryKey = 'identifier';
 
     /** @return HasMany<CarTag> */
     public function tags(): HasMany

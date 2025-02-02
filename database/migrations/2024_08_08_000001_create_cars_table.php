@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('cars', function (Blueprint $table) {
-            $table->string('name')->primary();
+            $table->string('identifier')->primary();
+            $table->string('name');
             $table->string('class');
             $table->string('manufacturer');
             $table->timestamps();

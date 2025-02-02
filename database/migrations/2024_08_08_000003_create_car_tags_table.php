@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('car_tags', function (Blueprint $table) {
             $table->id();
-            $table->string('car_name');
+            $table->string('car_identifier');
             $table->string('tag');
             $table->timestamps();
 
-            $table->foreign('car_name')->references('name')->on('cars')->onDelete('cascade');
+            $table->foreign('car_identifier')->references('identifier')->on('cars')->onDelete('cascade');
         });
     }
 

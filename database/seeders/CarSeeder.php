@@ -23,6 +23,7 @@ class CarSeeder extends Seeder
         // Convert JSON data to Car model instances
         foreach ($carData as $data) {
             $model = new Car();
+            $model->identifier = $data['class'] . '__' . $data['name'];
             $model->name = $data['name'];
             $model->class = $data['class'];
             $model->manufacturer = $data['extra_data']['manufacturer'];
